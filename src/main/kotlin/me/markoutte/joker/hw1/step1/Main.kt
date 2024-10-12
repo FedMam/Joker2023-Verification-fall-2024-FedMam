@@ -32,7 +32,6 @@ fun main(args: Array<String>) {
 
     println("Running: $className.$methodName) with seed = $seed")
     val errors = mutableSetOf<String>()
-    val b = ByteArray(20000)
     val start = System.nanoTime()
 
     val javaMethod = try {
@@ -42,11 +41,13 @@ fun main(args: Array<String>) {
         return
     }
 
-    val strategy: FuzzingStrategy = RandomHTMLTagsAttributesStrategy(random)
-    println("Fuzzing strategy: ${strategy.javaClass.simpleName}")
+    val fuzzingStrategy: FuzzingStrategy = GarbageStrategy()
+    val b = ByteArray(fuzzingStrategy.defaultBufferSize)
+
+    println("Fuzzing strategy: ${fuzzingStrategy.javaClass.simpleName}")
     try {
         val dataEx = b.apply(random::nextBytes)
-        val inputValuesEx = strategy.generateInputValues(javaMethod, dataEx)
+        val inputValuesEx = fuzzingStrategy.generateInputValues(javaMethod, dataEx)
         println("Input example: ${inputValuesEx.contentDeepToString()}")
     } catch(_: BufferUnderflowException) { }
 
@@ -56,13 +57,14 @@ fun main(args: Array<String>) {
         val data = b.apply(random::nextBytes)
         val inputValues: Array<Any>
         try {
-            inputValues = strategy.generateInputValues(javaMethod, data)
+            inputValues = fuzzingStrategy.generateInputValues(javaMethod, data)
         } catch (e: BufferUnderflowException) {
             println("Warning: byte buffer exhausted")
             continue
         }
         iterations++
         val inputValuesString = "${javaMethod.name}: ${inputValues.contentDeepToString()}"
+
         try {
             javaMethod.invoke(null, *inputValues)
         } catch (e: InvocationTargetException) {

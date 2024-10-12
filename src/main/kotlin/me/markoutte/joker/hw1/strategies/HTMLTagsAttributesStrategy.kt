@@ -3,9 +3,11 @@ package me.markoutte.joker.hw1.strategies
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.Stack
-import kotlin.random.Random
 
-class RandomHTMLTagsAttributesStrategy(rand: Random): FuzzingStrategy(rand) {
+class HTMLTagsAttributesStrategy : FuzzingStrategy() {
+    override val defaultBufferSize: Int
+        get() = 20000
+
     private val maxNameLength = 10U
     private val maxGarbageLength = 50U
     private val maxAttributes = 4U

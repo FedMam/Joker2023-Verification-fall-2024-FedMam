@@ -3,9 +3,10 @@ package me.markoutte.joker.hw1.strategies
 import java.lang.reflect.Method
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
-import kotlin.random.Random
 
-abstract class FuzzingStrategy(val rand: Random) {
+abstract class FuzzingStrategy {
+    abstract val defaultBufferSize: Int
+
     protected open fun generateInt(buffer: ByteBuffer): Int = buffer.get().toInt()
 
     protected open fun generateIntArray(buffer: ByteBuffer): IntArray =

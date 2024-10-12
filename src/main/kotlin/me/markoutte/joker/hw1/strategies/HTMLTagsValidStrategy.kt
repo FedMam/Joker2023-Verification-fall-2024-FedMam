@@ -2,9 +2,11 @@ package me.markoutte.joker.hw1.strategies
 
 import java.nio.ByteBuffer
 import java.util.Stack
-import kotlin.random.Random
 
-class RandomHTMLTags2Strategy(rand: Random): FuzzingStrategy(rand) {
+class HTMLTagsValidStrategy : FuzzingStrategy() {
+    override val defaultBufferSize: Int
+        get() = 5000
+
     private val maxTagNameLength = 10U
 
     private fun generateHTMLTagName(buffer: ByteBuffer): String {
