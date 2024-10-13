@@ -2,6 +2,8 @@ package me.markoutte.joker.hw1.step5
 
 import me.markoutte.joker.helpers.ComputeClassWriter
 import me.markoutte.joker.hw1.strategies.*
+import me.markoutte.joker.hw1.strategies.gbf.GrammarBasedFuzzing
+import me.markoutte.joker.hw1.strategies.gbf.defaultHTMLGrammar
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 import org.objectweb.asm.*

@@ -2,6 +2,8 @@ package me.markoutte.joker.hw1.step4
 
 import me.markoutte.joker.helpers.ComputeClassWriter
 import me.markoutte.joker.hw1.strategies.*
+import me.markoutte.joker.hw1.strategies.gbf.GrammarBasedFuzzing
+import me.markoutte.joker.hw1.strategies.gbf.defaultHTMLGrammar
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 import org.objectweb.asm.*
@@ -46,7 +48,7 @@ fun main(args: Array<String>) {
     }
 
     val fuzzingStrategy: FuzzingStrategy = GarbageStrategy()
-    val enableMutation = true
+    val enableMutation = false
     val mutationStrategy = MutationStrategies::random
     val b = ByteArray(fuzzingStrategy.defaultBufferSize)
 
@@ -80,7 +82,10 @@ fun main(args: Array<String>) {
 
         try {
             ExecutionResult.linesVisited = HashSet()
-            javaMethod.invoke(null, *inputValues)
+            javaMethod.invoke(null, *inputValues).apply {
+                val seedId = data.contentHashCode()
+                seeds.putIfAbsent(seedId, data)
+            }
             val sampleRating = ExecutionResult.linesVisited.size
             if (sampleRating > bestResult) {
                 bestResult = sampleRating

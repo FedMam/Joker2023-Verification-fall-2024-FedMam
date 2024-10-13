@@ -86,13 +86,6 @@ object MutationStrategies {
         }
     }
 
-    fun pierce(rand: Random, buffer: ByteArray): ByteArray = buffer.clone().apply {
-        val position = rand.nextInt(0, size)
-        val value = rand.nextInt(-128, 128).toByte()
-
-        set(position, value)
-    }
-
     val allStrategies = listOf(
         ::brush,
         ::shotgun,

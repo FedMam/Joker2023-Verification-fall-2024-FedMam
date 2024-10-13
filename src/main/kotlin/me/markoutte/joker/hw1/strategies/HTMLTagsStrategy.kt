@@ -5,7 +5,7 @@ import java.nio.charset.Charset
 
 class HTMLTagsStrategy : FuzzingStrategy() {
     override val defaultBufferSize: Int
-        get() = 2000
+        get() = 2400
 
     private val maxTagNameLength = 10U
 

@@ -58,6 +58,7 @@ private val rules = listOf(
     GrammarRule(ntContent,
         GrammarExpansion(),
         GrammarExpansion(ntText, ntContent),
+        GrammarExpansion(ntSpecialCharacter, ntContent),
         GrammarExpansion(ntSingleTag, ntContent),
         GrammarExpansion(ntSingleTagClosed, ntContent),
         GrammarExpansion(ntComment, ntContent),
@@ -69,6 +70,7 @@ private val rules = listOf(
     GrammarRule(ntTagPair,
         *((0..26)
             .map { "${('a' + it % 3)}${('a' + (it / 3) % 3)}${('a' + it / 9)}" }
+            .plus(listOf("html", "head", "body", "div", "script"))
             .map { GrammarExpansion(Terminal("<$it"), ntAttributes, Terminal(">"), ntContent, Terminal("</$it>")) }
             .toTypedArray())
     )

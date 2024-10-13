@@ -18,16 +18,23 @@ class GrammarBasedFuzzing(val grammar: Grammar): FuzzingStrategy() {
         else lst[(bufferValue.toUByte().toInt()) % lst.size]
 
     val MAX_NT_EXPANSIONS = 500
+    val MAX_LOOP_ITERS_ALLOWED = 10000
 
     override fun generateString(buffer: ByteBuffer): String {
         var parseTreeZipper = LinkedNode<GrammarNode>(grammar.startNonTerminal)
 
         var nonTerminalsLeft = true
         var ntExpansions = MAX_NT_EXPANSIONS
+        var iterations = 0
         while (nonTerminalsLeft) {
             nonTerminalsLeft = false
+            iterations++
 
             while (true) {
+                iterations++
+                if (iterations > MAX_LOOP_ITERS_ALLOWED)
+                    return "Error: stuck in an infinite loop"
+
                 if (parseTreeZipper.item is Terminal &&
                     parseTreeZipper.prev?.item is Terminal) {
                     parseTreeZipper = parseTreeZipper.mergeWithPrev { node1, node2 ->
